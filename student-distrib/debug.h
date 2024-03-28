@@ -1,7 +1,7 @@
 /* debug.h - Useful macros for debugging
  * vim:ts=4 noexpandtab
  */
-
+ 
 #ifndef _DEBUG_H
 #define _DEBUG_H
 

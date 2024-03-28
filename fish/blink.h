@@ -2,7 +2,7 @@
 #define RTC_REMOVE 1
 #define RTC_FIND 2
 #define RTC_SYNC 3
-
+ 
 struct mp1_blink_struct {
   unsigned short location;
   char on_char; 

@@ -166,7 +166,7 @@ the check.
    DESCRIPTION: the puts function can only push the character to the physical VM. We need to modify VM and terminal buffer.
    SOLUTION: write the terminal_puts. check the handling terminal and the showing terminal, use terminal_puts to write the character to the right buffer.
 
-
+ 
 20. TIME:       1/5/2022
    FINDER:     bopang5
    SOLVER:     bopang5
