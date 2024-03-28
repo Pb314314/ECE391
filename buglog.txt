@@ -1,0 +1,178 @@
+MP3 BUGLOG
+
+
+************************* CHECK POINT 1 ***********************************
+1.  TIME:       20/3/2022
+    FINDER:     qishenz2
+    SOLVER:     qishenz2
+
+    DESCRIPTION:
+        The IDT will not work when trying to enable interrupt. The function
+        pointer point to 0x05B0 which is out of pages.
+    SOLUTION:
+        The present in IDT was not set. This will make current exception
+        disabled.
+
+2. TIME:       22/3/2022
+   FINDER:     dingkun2
+   SOLVER:     qc20
+
+   DESCRIPTION:
+        The paging test will always be FAIL, even if we just want to return a PASS.
+    SOLUTION:
+        We forget to call our paging_init functon in kernel.c.
+
+3. TIME:       22/3/2022
+   FINDER:     dingkun2
+   SOLVER:     bopang5
+
+   DESCRIPTION:
+        We set CR0 first, and there is something wrong.
+   SOLUTION:
+        We should set CR4 first, then set CR0.
+
+
+************************** CHECK POINT 2 ************************************
+
+4.  TIME:       27/3/2022
+    FINDER:     qishenz2
+    SOLVER:     qishenz2
+
+    DESCRIPTION:
+        When handle the key board function keys, the numlock is always open.
+    SOLUTION:
+        The bitwise operator ~ will revert 1 to -2. then the result is always Ture.
+        now change the bitwise operator to logic operator.
+
+5.  TIME:       27/3/2022
+    FINDER:     qishenz2
+    SOLVER:     qishenz2
+
+    DESCRIPTION:
+        When handle deletion for tab keys, the cursor will move out of the screen.
+    SOLUTION:
+        the deletion will first read the terminal buffer. However, when the buffer
+        is full, the read process will read out of the buffer range, that will cause
+        some seg problems.
+
+6.  TIME:       27/3/2022
+    FINDER:     qishenz2
+    SOLVER:     qishenz2
+
+    DESCRIPTION:
+        When trying to roll the screen, it will raise page fault.
+    SOLUTION:
+        The pointer type I use was wrong when trying to copy the old video memory above.
+        this will lead to error physical address.
+
+7.  TIME:       28/3/2022
+    FINDER:     bopang5
+    SOLVER:     dingkun2
+
+    DESCRIPTION:
+        When we test file system and try to print all file name, the print can't stop.
+    SOLUTION:
+        The condition to return -1 in function read_dentry_by_index is always 63.
+
+8. TIME:       28/3/2022
+   FINDER:     qc20
+   SOLVER:     bopang5
+
+   DESCRIPTION: When we try to test the file read for small text, the content of fiel is empty.
+
+   SOLUTION:
+
+9. TIME:       27/3/2022
+   FINDER:     qc20
+   SOLVER:     bopang5
+
+   DESCRIPTION: In the systemfile.h, the dentry_t should be defined before the strucutre boot_block_t.
+
+   SOLUTION: define the dentry_t before the boot_block.
+
+10. TIME:       28/3/2022
+   FINDER:     bopang5
+   SOLVER:     bopang5
+
+   DESCRIPTION: The real_block in the read data function should be found after check the number.
+
+   SOLUTION: Check the number of offset%BLOCKSIZE and if the index in th loop>BLOCK_SIZE, I should update the block num and find the
+true num.
+
+11. TIME:       28/3/2022
+   FINDER:     bopang5
+   SOLVER:     bopang5
+
+   DESCRIPTION: The file_name in the read dentry by name function should be checked whether the length is
+longer than FILE_NAME_MAX
+
+   SOLUTION: Check two file name, both the input and the file name in the dentry. And compare the string after
+the check.
+
+12. TIME:       28/3/2022
+   FINDER:     bopang5
+   SOLVER:     bopang5
+   DESCRIPTION: The number in the read data should be checked, whether the read index is out of the range.
+
+   SOLUTION: Should check the index.
+13. TIME:       11/4/2022
+   FINDER:     bopang5
+   SOLVER:     bopang5
+
+   DESCRIPTION: The syscall handler linkage can't be accessed. The machine will restart when doing asm 0x80 int
+   SOLUTION: It is weird that I add the pushal at the beginning and popal at the end, then the syscall handler can be accessed.
+
+14. TIME:       11/4/2022
+   FINDER:     dingkun2
+   SOLVER:     bopang5
+
+   DESCRIPTION: The FD descriptor error. The FD is rewrite be another open call.
+   SOLUTION: Set the flag in FD to IN_USE when it is used.
+
+15. TIME:       11/4/2022
+   FINDER:     qc20
+   SOLVER:     qishenz2
+
+   DESCRIPTION: page fault when testing
+   SOLUTION: We use different descriptory when two people works on it.
+
+16. TIME:       18/4/2022
+   FINDER:     qc20
+   SOLVER:     dingkun2
+
+   DESCRIPTION: page fault when testing fish image
+   SOLUTION: We forget to initialize the page table for vid_map, after we added it, page fault is fixed
+
+17. TIME:       18/4/2022
+   FINDER:     dingkun2
+   SOLVER:     qishenz2
+
+   DESCRIPTION: file system read function is not correct for the fish
+   SOLUTION: one of the return value of file read is -1, we change it to 0
+
+
+18. TIME:       1/5/2022
+   FINDER:     bopang5
+   SOLVER:     bopang5
+
+   DESCRIPTION: read_data function in file_sys use the wrong offset, which cause the page fault.
+   SOLUTION: use offset/DATA_BLOCK to do the data block copy.
+
+
+19. TIME:       1/5/2022
+   FINDER:     qishenz2
+   SOLVER:     qishenz2
+
+   DESCRIPTION: the puts function can only push the character to the physical VM. We need to modify VM and terminal buffer.
+   SOLUTION: write the terminal_puts. check the handling terminal and the showing terminal, use terminal_puts to write the character to the right buffer.
+
+
+20. TIME:       1/5/2022
+   FINDER:     bopang5
+   SOLVER:     bopang5
+
+   DESCRIPTION: When do the fish program, need map the program paging to the right buffer.
+   SOLUTION: use vid_remap to map the program paging to the right buffer.
+
+
+
